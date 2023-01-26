@@ -6,7 +6,7 @@ import (
 	"qrestic/resticcmd"
 )
 
-func main() {
+func main2() {
 	gui := gui.NewGui()
 
 	go func() {
@@ -38,7 +38,7 @@ func onProgress(data string) {
 	fmt.Println("!" + data)
 }
 
-func main2() {
+func main() {
 	err := resticcmd.ExecuteCmdProgress("restic -r /tmp/rest backup /Users/sowisz/Programming/pythona /Users/sowisz/Programming/python --json",
 		onProgress, "RESTIC_PASSWORD=aqq", "RESTIC_PROGRESS_FPS=2")
 	if err != nil {

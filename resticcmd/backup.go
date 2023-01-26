@@ -12,7 +12,7 @@ func processCmdStdOut(stdout io.ReadCloser, progressCallback func(progress strin
 	var line strings.Builder
 
 	for {
-		readBytes, err := stdout.Read(buf[:])
+		readBytes, err := stdout.Read(buf)
 		if err != nil {
 			if err == io.EOF {
 				return nil
