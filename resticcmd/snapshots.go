@@ -3,17 +3,12 @@ package resticcmd
 import (
 	"encoding/json"
 	"fmt"
-	"os"
-	"os/exec"
 	"qrestic/types"
 	"strings"
 )
 
-func executeCmd(cmdLine string) ([]byte, error) {
-	cmdArgs := strings.Split(cmdLine, " ")
-	cmd := exec.Command(cmdArgs[0], cmdArgs[1:]...)
-	cmd.Env = append(os.Environ(), "RESTIC_PASSWORD=aqq")
-
+func executeCmd(cmdLine string, env ...string) ([]byte, error) {
+	cmd := prepareCmd(cmdLine, env...)
 	out, err := cmd.CombinedOutput()
 
 	if err != nil {
@@ -57,7 +52,7 @@ func convertTime(time string) string {
 }
 
 func GetSnapshots() (types.SnapshotTree, error) {
-	data, err := executeCmd("restic -r /tmp/rest snapshots --json")
+	data, err := executeCmd("restic -r /tmp/rest snapshots --json", "RESTIC_PASSWORD=aqq")
 	if err != nil {
 		return nil, err
 	}

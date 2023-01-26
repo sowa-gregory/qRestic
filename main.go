@@ -33,3 +33,16 @@ func main() {
 	gui.ShowAndRun()
 
 }
+
+func onProgress(data string) {
+	fmt.Println("!" + data)
+}
+
+func main2() {
+	err := resticcmd.ExecuteCmdProgress("restic -r /tmp/rest backup /Users/sowisz/Programming/pythona /Users/sowisz/Programming/python --json",
+		onProgress, "RESTIC_PASSWORD=aqq", "RESTIC_PROGRESS_FPS=2")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+}
