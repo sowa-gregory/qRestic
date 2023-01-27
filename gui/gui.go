@@ -83,7 +83,7 @@ func (gui *Gui) ShowError(err error, quit bool) {
 func (gui *Gui) createGui() {
 	gui.app = app.New()
 
-	gui.window = gui.app.NewWindow("qRestic")
+	gui.window = gui.app.NewWindow("qRestic v0.8")
 	gui.treeData = make(types.SnapshotTree)
 
 	gui.tree = &widget.Tree{
