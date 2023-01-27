@@ -47,8 +47,8 @@ func (gui *Gui) DisableBackupButton() {
 	gui.backupButton.Disable()
 }
 
-func (gui *Gui) ShowProgress(value int) {
-	gui.progress.SetValue(float64(value))
+func (gui *Gui) ShowProgress(value float64) {
+	gui.progress.SetValue(value)
 	gui.progress.Show()
 	gui.progressInfinite.Hide()
 }
@@ -99,7 +99,6 @@ func (gui *Gui) createGui() {
 			node.(*widget.Label).SetText(uid)
 		},
 	}
-	gui.tree.ExtendBaseWidget(gui.tree)
 
 	gui.progress = widget.NewProgressBar()
 	gui.progress.Hide()
@@ -122,5 +121,5 @@ func (gui *Gui) createGui() {
 	//content := container.NewBorder(nil, nil, nil, buttonContent, listContent)
 
 	gui.window.SetContent(content)
-	gui.window.Resize(fyne.NewSize(500, 500))
+	gui.window.Resize(fyne.NewSize(800, 600))
 }

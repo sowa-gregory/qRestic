@@ -6,43 +6,47 @@ import (
 	"qrestic/resticcmd"
 )
 
-func main2() {
-	gui := gui.NewGui()
+var g *gui.Gui
 
-	go func() {
-		gui.ShowProgressInfinite()
-		gui.DisableBackupButton()
-		gui.SetStatus("reading snapshots")
-		if data, err := resticcmd.GetSnapshots(); err == nil {
-			gui.SetSnapshots(data)
-			gui.SetStatus("OK")
-			gui.EnableBackupButton()
-		} else {
-			gui.SetStatus("failed")
-			gui.ShowError(err)
-		}
-		gui.HideProgress()
+func onBackupStatus(status resticcmd.BackupStatus) {
+	g.SetStatus(fmt.Sprintf("storing %d/%d files, elapsed:%d s", status.Files_done, status.Total_files, status.Seconds_elapsed))
+	g.ShowProgress(status.Percent_done)
+}
 
-	}()
-
-	gui.SetBackupCallback(func() {
-		fmt.Println("he he")
-		gui.ShowProgress(56)
-	})
-
-	gui.ShowAndRun()
+func onBackupSummary(summary resticcmd.BackupSummary) {
+	readingSnaphots()
+	g.SetStatus(fmt.Sprintf("Done - %d new files, %d changed files, elapsed:%d s", summary.Files_new, summary.Files_changed, (int)(summary.Total_duration)))
+	g.HideProgress()
 
 }
 
-func onProgress(data string) {
-	fmt.Println("!" + data)
+func readingSnaphots() {
+	g.ShowProgressInfinite()
+	g.DisableBackupButton()
+	g.SetStatus("reading snapshots")
+	if data, err := resticcmd.GetSnapshots(); err == nil {
+		g.SetSnapshots(data)
+		g.SetStatus("OK")
+		g.EnableBackupButton()
+	} else {
+		g.SetStatus("failed")
+		g.ShowError(err)
+	}
+	g.HideProgress()
 }
 
 func main() {
-	err := resticcmd.ExecuteCmdProgress("restic -r /tmp/rest backup /Users/sowisz/Programming/pythona /Users/sowisz/Programming/python --json",
-		onProgress, "RESTIC_PASSWORD=aqq", "RESTIC_PROGRESS_FPS=2")
-	if err != nil {
-		fmt.Println(err)
-	}
+	g = gui.NewGui()
+
+	go readingSnaphots()
+
+	g.SetBackupCallback(func() {
+		g.DisableBackupButton()
+
+		resticcmd.DoBackup(onBackupStatus, onBackupSummary)
+
+	})
+
+	g.ShowAndRun()
 
 }
