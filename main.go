@@ -30,21 +30,25 @@ func readingSnaphots() {
 		g.EnableBackupButton()
 	} else {
 		g.SetStatus("failed")
-		g.ShowError(err)
+		g.ShowError(err, true)
 	}
 	g.HideProgress()
 }
 
 func main() {
 	g = gui.NewGui()
+	resticcmd.ReadConfig("backup-conf.json")
 
 	go readingSnaphots()
 
 	g.SetBackupCallback(func() {
 		g.DisableBackupButton()
 
-		resticcmd.DoBackup(onBackupStatus, onBackupSummary)
-
+		if err := resticcmd.DoBackup(onBackupStatus, onBackupSummary); err != nil {
+			g.SetStatus("failed")
+			g.ShowError(err, false)
+		}
+		g.EnableBackupButton()
 	})
 
 	g.ShowAndRun()

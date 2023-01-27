@@ -72,9 +72,11 @@ func (gui *Gui) ShowAndRun() {
 	gui.window.ShowAndRun()
 }
 
-func (gui *Gui) ShowError(err error) {
+func (gui *Gui) ShowError(err error, quit bool) {
 	d := dialog.NewError(err, gui.window)
-	d.SetOnClosed(gui.app.Quit)
+	if quit {
+		d.SetOnClosed(gui.app.Quit)
+	}
 	d.Show()
 }
 

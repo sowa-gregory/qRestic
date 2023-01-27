@@ -52,7 +52,11 @@ func convertTime(time string) string {
 }
 
 func GetSnapshots() (types.SnapshotTree, error) {
-	data, err := executeCmd("restic -r /tmp/rest snapshots --json", "RESTIC_PASSWORD=aqq")
+	if !configLoaded {
+		panic("call ReadConfig first")
+	}
+	cmdLine := fmt.Sprintf("restic -r %s snapshots --json", config.Repository)
+	data, err := executeCmd(cmdLine, "RESTIC_PASSWORD="+config.Password)
 	if err != nil {
 		return nil, err
 	}

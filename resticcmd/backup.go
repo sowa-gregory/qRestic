@@ -108,11 +108,12 @@ func DoBackup(statusCb StatusCallback, summaryCb SummaryCallback) error {
 		cmdLine += src + " "
 	}
 
-	for _, exc := range config.Exclude {
-
+	for _, exc := range config.Excludes {
+		cmdLine += "--exclude=\"" + exc + "\" "
 	}
+	cmdLine += "--json"
 
-	err := executeCmdProgress("restic -r /tmp/rest backup /Users/sowisz/Privatee --json", statusCb, summaryCb, "RESTIC_PASSWORD="+config.Password, "RESTIC_PROGRESS_FPS=2")
+	err := executeCmdProgress(cmdLine, statusCb, summaryCb, "RESTIC_PASSWORD="+config.Password, "RESTIC_PROGRESS_FPS=2")
 	if err != nil {
 		return err
 	}

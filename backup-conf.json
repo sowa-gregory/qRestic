@@ -1,0 +1,6 @@
+{
+    "repository":"/tmp/rest",
+    "password":"aqq",
+    "sources":["/Users/sowisz/Private", "/Users/sowisz/Programming"],
+    "excludes":[".git/*"]
+}
