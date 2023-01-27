@@ -103,7 +103,16 @@ func executeCmdProgress(cmdLine string, statusCb StatusCallback, summaryCb Summa
 }
 
 func DoBackup(statusCb StatusCallback, summaryCb SummaryCallback) error {
-	err := executeCmdProgress("restic -r /tmp/rest backup /Users/sowisz/Private --json", statusCb, summaryCb, "RESTIC_PASSWORD=aqq", "RESTIC_PROGRESS_FPS=2")
+	cmdLine := fmt.Sprintf("restic -r %s backup ", config.Repository)
+	for _, src := range config.Sources {
+		cmdLine += src + " "
+	}
+
+	for _, exc := range config.Exclude {
+
+	}
+
+	err := executeCmdProgress("restic -r /tmp/rest backup /Users/sowisz/Privatee --json", statusCb, summaryCb, "RESTIC_PASSWORD="+config.Password, "RESTIC_PROGRESS_FPS=2")
 	if err != nil {
 		return err
 	}
