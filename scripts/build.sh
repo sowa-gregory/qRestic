@@ -1,1 +1,2 @@
-go build -ldflags="-s -w" -o qrestic main.go
+cd src
+go build -ldflags="-s -w" -o ../qrestic main.go
