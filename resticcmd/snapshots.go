@@ -55,8 +55,8 @@ func GetSnapshots() (types.SnapshotTree, error) {
 	if !configLoaded {
 		panic("call ReadConfig first")
 	}
-	cmdLine := fmt.Sprintf("restic -r %s snapshots --json", config.Repository)
-	data, err := executeCmd(cmdLine, "RESTIC_PASSWORD="+config.Password)
+	cmdLine := fmt.Sprintf("restic -r %s snapshots --json", configs[selectedConfig].Repository)
+	data, err := executeCmd(cmdLine, "RESTIC_PASSWORD="+configs[selectedConfig].Password)
 	if err != nil {
 		return nil, err
 	}

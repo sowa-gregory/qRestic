@@ -1,7 +1,6 @@
 package gui
 
 import (
-	"fmt"
 	"qrestic/types"
 
 	"fyne.io/fyne/v2"
@@ -13,15 +12,19 @@ import (
 )
 
 type Gui struct {
-	app              fyne.App
-	treeData         types.SnapshotTree
-	window           fyne.Window
-	tree             *widget.Tree
-	progressInfinite *widget.ProgressBarInfinite
-	progress         *widget.ProgressBar
-	status           *widget.Label
-	backupButton     *widget.Button
-	backupCallback   *func()
+	app               fyne.App
+	treeData          types.SnapshotTree
+	window            fyne.Window
+	tree              *widget.Tree
+	progressInfinite  *widget.ProgressBarInfinite
+	progress          *widget.ProgressBar
+	status            *widget.Label
+	backupButton      *widget.Button
+	combo             *widget.Select
+	comboPrevSelected int
+
+	backupCallback *func()
+	comboCallback  *func(index int)
 }
 
 func NewGui() *Gui {
@@ -45,6 +48,14 @@ func (gui *Gui) EnableBackupButton() {
 
 func (gui *Gui) DisableBackupButton() {
 	gui.backupButton.Disable()
+}
+
+func (gui *Gui) EnableCombo() {
+	gui.combo.Enable()
+}
+
+func (gui *Gui) DisableCombo() {
+	gui.combo.Disable()
 }
 
 func (gui *Gui) ShowProgress(value float64) {
@@ -80,6 +91,17 @@ func (gui *Gui) ShowError(err error, quit bool) {
 	d.Show()
 }
 
+func (gui *Gui) SetCombo(options []string) {
+	gui.combo.Options = options
+	gui.combo.SetSelectedIndex(0)
+	gui.comboPrevSelected = 0
+	gui.combo.Refresh()
+}
+
+func (gui *Gui) SetComboCallback(callback func(index int)) {
+	gui.comboCallback = &callback
+}
+
 func (gui *Gui) createGui() {
 	gui.app = app.New()
 
@@ -108,17 +130,24 @@ func (gui *Gui) createGui() {
 	gui.progressInfinite.Hide()
 	gui.status = widget.NewLabel("")
 	gui.backupButton = widget.NewButton("Backup", func() {
-		fmt.Println("backup")
 		if gui.backupCallback != nil {
 			(*gui.backupCallback)()
 		}
 	})
 
-	content := container.NewBorder(widget.NewLabel("Snapshots:"),
-		container.NewVBox(widget.NewSeparator(), gui.backupButton,
-			container.NewGridWithColumns(2, gui.status,
-				container.New(layout.NewMaxLayout(), gui.progressInfinite, gui.progress))),
-		nil, nil, gui.tree)
+	gui.combo = widget.NewSelect(nil, func(value string) {
+		sel := gui.combo.SelectedIndex()
+		if gui.comboCallback != nil && sel != gui.comboPrevSelected {
+			gui.comboPrevSelected = sel
+			(*gui.comboCallback)(sel)
+		}
+	})
+	gui.combo.SetSelectedIndex(0)
+
+	topBox := container.NewGridWithColumns(3, widget.NewLabel("Config:"), gui.combo, container.New(layout.NewMaxLayout(), gui.progressInfinite, gui.progress))
+	content := container.NewBorder(topBox,
+		container.NewVBox(widget.NewSeparator(), gui.backupButton, gui.status),
+		nil, nil, widget.NewCard("Snapshots", "", gui.tree))
 
 	//content := container.NewBorder(nil, nil, nil, buttonContent, listContent)
 

@@ -1,6 +1,26 @@
-{
-    "repository":"/tmp/rest",
-    "password":"aqq",
-    "sources":["/Users/sowisz/Private", "/Users/sowisz/Programming"],
-    "excludes":[".git/*"]
-}
+[
+    {
+        "name":"local disk",
+        "repository": "/tmp/rest",
+        "password": "aqq",
+        "sources": [
+            "/Users/sowisz/Private",
+            "/Users/sowisz/Programming"
+        ],
+        "excludes": [
+            ".git/*"
+        ]
+    },
+    {
+        "name":"pc-server backup",
+        "repository": "/tmp/resta",
+        "password": "aqq",
+        "sources": [
+            "/Users/sowisz/Private",
+            "/Users/sowisz/Programming"
+        ],
+        "excludes": [
+            ".git/*"
+        ]
+    }
+]
