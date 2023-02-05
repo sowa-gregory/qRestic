@@ -1,26 +1,47 @@
 [
     {
-        "name":"local disk",
-        "repository": "/tmp/rest",
+        "name": "pc-server backup0",
+        "repository": "rest:http://sowisz:blekota@pc-server:9000/sowisz/bigapple",
         "password": "aqq",
         "sources": [
             "/Users/sowisz/Private",
             "/Users/sowisz/Programming"
         ],
         "excludes": [
-            ".git/*"
+            ".git",
+            "node_modules",
+            ".pio",
+            ".DS_Store"
         ]
     },
     {
-        "name":"pc-server backup",
-        "repository": "/tmp/resta",
+        "name": "pc-server backup1",
+        "repository": "rest:http://sowisz:blekota@pc-server:9001/sowisz/bigapple",
         "password": "aqq",
         "sources": [
             "/Users/sowisz/Private",
             "/Users/sowisz/Programming"
         ],
         "excludes": [
-            ".git/*"
+            ".git",
+            ".pio",
+            "node_modules",
+            ".DS_Store"
+        ]
+    },
+    {
+        "name": "pc-server backup2",
+        "repository": "rest:http://sowisz:blekota@pc-server:9002/sowisz/bigapple",
+        "password": "aqq",
+        "sources": [
+            "/Users/sowisz/Private",
+            "/Users/sowisz/Programming"
+        ],
+        "excludes": [
+            ".git",
+            ".pio",
+            "node_modules",
+            ".DS_Store"
         ]
     }
 ]

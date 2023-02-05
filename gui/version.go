@@ -1,3 +1,3 @@
 package gui
 
-var version string = "0.90"
+var AppVersion string = "1.00"

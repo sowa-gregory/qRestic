@@ -38,6 +38,11 @@ type BackupSummary struct {
 type StatusCallback func(status BackupStatus)
 type SummaryCallback func(summary BackupSummary)
 
+func doProgressCallbackDebug(line string, statusCb StatusCallback, summaryCb SummaryCallback) error {
+	fmt.Println(line)
+	return nil
+}
+
 func doProgressCallback(line string, statusCb StatusCallback, summaryCb SummaryCallback) error {
 	if strings.HasPrefix(line, "{\"message_type\":\"status\"") {
 		var status BackupStatus
@@ -103,16 +108,18 @@ func executeCmdProgress(cmdLine string, statusCb StatusCallback, summaryCb Summa
 }
 
 func DoBackup(statusCb StatusCallback, summaryCb SummaryCallback) error {
-	cmdLine := fmt.Sprintf("restic -r %s backup ", configs[selectedConfig].Repository)
-	for _, src := range configs[selectedConfig].Sources {
-		cmdLine += src + " "
-	}
-
+	cmdLine := fmt.Sprintf("restic|-r|%s|backup|", configs[selectedConfig].Repository)
 	for _, exc := range configs[selectedConfig].Excludes {
-		cmdLine += "--exclude=\"" + exc + "\" "
+		cmdLine += "--exclude=" + exc + "|"
 	}
-	cmdLine += "--json"
 
+	for _, src := range configs[selectedConfig].Sources {
+		cmdLine += src + "|"
+	}
+
+	cmdLine += "--compression=max|--json"
+
+	fmt.Println(cmdLine)
 	err := executeCmdProgress(cmdLine, statusCb, summaryCb, "RESTIC_PASSWORD="+configs[selectedConfig].Password, "RESTIC_PROGRESS_FPS=2")
 	if err != nil {
 		return err

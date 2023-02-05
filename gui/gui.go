@@ -105,7 +105,7 @@ func (gui *Gui) SetComboCallback(callback func(index int)) {
 func (gui *Gui) createGui() {
 	gui.app = app.New()
 
-	gui.window = gui.app.NewWindow("qRestic v" + version)
+	gui.window = gui.app.NewWindow("qRestic v" + AppVersion)
 	gui.treeData = make(types.SnapshotTree)
 
 	gui.tree = &widget.Tree{
