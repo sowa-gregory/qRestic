@@ -9,7 +9,7 @@ import (
 var g *gui.Gui
 
 func onBackupStatus(status resticcmd.BackupStatus) {
-	g.SetStatus(fmt.Sprintf("storing %d/%d files, elapsed:%d s", status.Files_done, status.Total_files, status.Seconds_elapsed))
+	g.SetStatus(fmt.Sprintf("storing %d/%d files,   elapsed:%d s", status.Files_done, status.Total_files, status.Seconds_elapsed))
 	g.ShowProgress(status.Percent_done)
 }
 
@@ -60,6 +60,8 @@ func onComboSelect(index int) {
 }
 
 func main() {
+	fmt.Println("qRestic v" + gui.AppVersion)
+
 	configNames := resticcmd.ReadConfig("backup-conf.json")
 
 	g = gui.NewGui()
