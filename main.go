@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"qrestic/gui"
 	"qrestic/resticcmd"
-
-	"fyne.io/fyne/v2/dialog"
 )
 
 var g *gui.Gui
@@ -67,9 +65,9 @@ func main() {
 	configNames, err := resticcmd.ReadConfig("backup-conf.json")
 
 	if err != nil {
-		d := dialog.NewError(err, nil)
-		d.Show()
+		panic(err)
 	}
+	g = gui.NewGui()
 
 	g.SetCombo(configNames)
 	g.SetComboCallback(onComboSelect)
